@@ -26,6 +26,8 @@ class MiWS:
         self.notes = notes(self.address, self.i, self.ssl)
         self.following = following(self.address, self.i, self.ssl)
 
+        self.initialized = False
+
     async def ws_handler(self):
         try:
             procotol = "ws://"
@@ -36,7 +38,9 @@ class MiWS:
                 ):
                     try:
                         try:
-                            await hook.functions["ready"]()
+                            if self.initialized == False:
+                                await hook.functions["ready"]()
+                                self.initialized = True
                         except KeyError:
                             pass
                         while True:
